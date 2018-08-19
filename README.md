@@ -74,5 +74,61 @@ There’s simple command-line emulator available, made in C#. It accepts assembl
 
 Preprocessor functions: removes comments and empty lines, resolves names of constants, variables and labels.
 
+### Example
+```
+;;;; File: prog.R200
+;;;; testting program
+;;;; counts in RA from 0 to COUNT
 
+;;;;const's and var's declarations
+const COUNT 5		;'const' is a key-word that binds name 'COUNT' to address 0x0 
+			;of CONST memory and puts value 5 in there by that address
+var TEMP		;'var' is a key-word that binds name 'TEMP' to address 0x0 of RAM
+
+;;;;Start of the program
+	mov RB, 0	;load value 0 to RB
+	movm TEMP, RB 	;store RB to RAM word by address 'TEMP' (i.e. 0x0)
+	movm RA, TEMP	;load RAM word by address 'TEMP' (i.e. 0x0) to RA
+loop:			;'loop' is a label name. Preprocessor binds name 'loop' to  
+			;address 0x1 of CONST memory and puts value 0x01
+                  	;(ROM address the label is points to) in there by that address
+	movc RB, COUNT 	;load value from CONST memory by address 'COUNT' (i.e. 0x0) to RB
+	sub RB		;RB := RB-RA 
+	snz		;skip next instruction if ZF==0 (result of previous ALU instruction is not zero)
+	jmp exit	;load value from CONST memory by address 'exit' (i.e. 0x2) to PC
+	inc RA 		;RA := RA+1
+	jmp loop	;load value from CONST memory by address 'loop' (i.e. 0x1) to PC
+exit:			;'exit' is a label name. Preprocessor binds name 'exit' to address 0x2 of CONST memory 
+			;and puts value 0x07 (ROM address the label is points to) in there by that address
+	halt		;stops the machine clock
+  ```
+Run step-by-step: `remu.exe prog.R200`, run until `halt`: `remu.exe prog.R200 run`.
+
+At every step the emulator outputs its curent state. For instance:
+```
+Cycle: 38		--- machine cycle counter
+CMD: halt		--- last executed instruction
+State:			--- current state of registers, RAM and ALU flags
+RA: 5[0b101, 0x5], RB: 0[0b0, 0x0], LEAF: 0, PC: 10
+RAM: 0 0 0 0 0 0 0 0
+c:0, z:1, skip:0, bc:0
+CONST: 5 3 9 0 0 0 0 0 0 0 0 0 0 0 0 0
+```
+
+### Notes
+
+- All `const`’s and `var`’s must precede actual instructions in the file.
+- It is recommended to use 4 or more characters to name your `const`’s, `var`’s and labels, so they don’t accidently overlap with instruction names.
+- All numerical values should be decimal. Hex `0x` and Bin `0b` formats are not supported.
+- Emulation stops on the first encounter of `halt` instruction.
+- There’s no comprehensive error output or any error-checking functionality (such as name overlapping, memory bound violation, etc.). If something goes wrong, the program just crashes with unhandled exception.
+- It is recommended to output the final result to RA and RB.
+- Memory limits
+  - `conts`'s and labels: No more than 16 per program
+  - `var`'s: No more than 8 per program
+  - instructions: No more than 64 per program
+  
+  ## Software ideas
+  
+  ## Current construction progress
 
