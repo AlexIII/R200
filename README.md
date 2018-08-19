@@ -124,11 +124,22 @@ CONST: 5 3 9 0 0 0 0 0 0 0 0 0 0 0 0 0
 - There’s no comprehensive error output or any error-checking functionality (such as name overlapping, memory bound violation, etc.). If something goes wrong, the program just crashes with unhandled exception.
 - It is recommended to output the final result to RA and RB.
 - Memory limits
-  - `conts`'s and labels: No more than 16 per program
-  - `var`'s: No more than 8 per program
-  - instructions: No more than 64 per program
+  - `conts`'s and labels: no more than 16 per program
+  - `var`'s: no more than 8 per program
+  - instructions: no more than 64 per program
   
-  ## Software ideas
+## Software ideas
+There’s two programs available: multiplication `mul.R200` (12-bit X 12bit = 24bit) and division `div.R200` (24-bit / 24-bit = 24-bit[result] 24-bit[reminder]).
+There’s also sqrt `sqrt.R200` program that implements Babylonian method, but unfortunately as for now I haven’t been able to fit it in 64 instructions (it’s 77 now), so it doesn’t work with the emulator.
+
   
-  ## Current construction progress
+## Current construction progress
+
+- Blocks assembled, mouned and tested: PC register, PC increment, ROM, clock generator.
+- Blocks assembled: ALU, RA register, RB register, RAM
+- Blocks that need to be designed: instruction decoder
+
+### Photo
+
+### Video
 
