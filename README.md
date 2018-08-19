@@ -16,7 +16,7 @@ With that being said, let's get down to business.
 2.	No semiconductors allowed except diodes. (there’s gonna be TONS of diodes, though)
 
 ## Machine specs
-The machine is based on harvard architecture (separate program and data memory).
+The machine is based on the harvard architecture (separate program and data memory).
 ### Block diagram
 <img width="600" src="block-dia.png" />
 
@@ -27,6 +27,7 @@ Bus
 - 6-bit program address bus
 - 4-bit RAM address bus
 - 4-bit CONST MEMORY address bus
+
 Memory
 - ROM (Program memory): 64 x 8-bit instructions (implemented as array of 64 by 8 dip-switches)
 - CONST MEMORY: 16 x 12-bit words (implemented as array of 16 by 12 dip-switches)
@@ -35,6 +36,33 @@ Memory
   - 2x12-bit GPRs [RA and RB] (implemented as array of 2 by 12 relays)
   - 6-bit Program Counter [PC] (implemented as array of 6 relays)
   - 6-bit Leaf Register (implemented as array of 6 electrolytic capacitors)
+
+ALU
+- Some of 16 functions of ALU: add/sub, inc/dec, shift right/left, bit-wise not/and/or/xor
+- ALU can only operates on GPRs [RA and RB]
+- Carry Flag [CF]
+- Zero Flag [ZF]
+
+I/O
+- Input: dip-switches of CONST MEMORY are designed to be used as user input
+- Output: every bit of GPRs [RA and RB] has an LED. At the end of a program the result should be loaded in GPRs in order to be read by user
+
+Clock
+- Every instruction is executed in one machine cycle. All instructions are single-worded. One machine cycle consists of 2 clock pulses. One machine cycle approximately takes 0.45sec. of real time.
+
+Hardware
+- 200+ 48V 4PDT (4-pole double-throw) electromagnetic relays 
+- 1000+ 1N4001 diodes
+- 150+ 220uF electrolytic capacitors
+- 40+ LEDs
+- 704 individual switches
+- 300+ resistors
+- 3A power supply (temporary switched-mode type, so technically it breaks the second ground rule)
+
+## Documentation
+The only somewhat finished now piece of documentation is the instruction set.
+- General instructions
+- ALU instructions
 
 
 
