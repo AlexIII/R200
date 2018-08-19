@@ -1,0 +1,25 @@
+;;;; File: prog.R200
+;;;; testting program
+;;;; counts in RA from 0 to COUNT
+
+;;;;const's and var's declarations
+const COUNT 5		;'const' is a key-word that binds name 'COUNT' to address 0x0 
+					;of CONST memory and puts value 5 in there by that address
+var TEMP			;'var' is a key-word that binds name 'TEMP' to address 0x0 of RAM
+
+;;;;Start of the program
+	mov RB, 0		;load value 0 to RB
+	movm TEMP, RB 	;store RB to RAM word by address 'TEMP' (i.e. 0x0)
+	movm RA, TEMP	;load RAM word by address 'TEMP' (i.e. 0x0) to RA
+loop:				;'loop' is a label name. Preprocessor binds name 'loop' to  
+					;address 0x1 of CONST memory and puts value 0x01
+                  	;(ROM address the label is points to) in there by that address
+	movc RB, COUNT 	;load value from CONST memory by address 'COUNT' (i.e. 0x0) to RB
+	sub RB			;RB := RB-RA 
+	snz				;skip next instruction if ZF==0 (result of previous ALU instruction is not zero)
+	jmp exit		;load value from CONST memory by address 'exit' (i.e. 0x2) to PC
+	inc RA 			;RA := RA+1
+	jmp loop		;load value from CONST memory by address 'loop' (i.e. 0x1) to PC
+exit:				;'exit' is a label name. Preprocessor binds name 'exit' to address 0x2 of CONST memory 
+					;and puts value 0x07 (ROM address the label is points to) in there by that address
+	halt			;stops the machine clock
