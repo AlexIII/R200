@@ -50,7 +50,7 @@ I/O
 - Output: every bit of GPRs [RA and RB] has an LED. At the end of a program the result should be loaded in GPRs in order to be read by user
 
 Clock
-- Every instruction is executed in one machine cycle. All instructions are single-worded. One machine cycle consists of 2 clock pulses. One machine cycle approximately takes 0.45sec. of real time.
+- Every instruction is executed in one machine cycle. All instructions are single-worded. One machine cycle consists of 2 clock pulses. One machine cycle takes approximately 0.45sec. of real time.
 
 Hardware
 - 200+ 48V 4PDT (4-pole double-throw) electromagnetic relays 
@@ -69,7 +69,7 @@ PDF: <a href="doc/R200 Instruction Set.pdf">R200 Instruction Set</a>
 For ALU instructions if Rd is RA, then Rs is RB and vice-versa.
 
 ## Important notes
-Due to the physical implementation limitations, any RAM word and LEAF register can only be read ones. Once the RAM location or LEAF register has been read its state becomes undefined. That’s why if you want to preserve value in a RAM, you must write it back to the same location immediately every time it has been read. In the emulator RAM a word resets to 0 after it has been read.
+Due to the physical implementation limitations, any RAM word and LEAF register can only be read ones. Once the RAM location or LEAF register has been read, its state becomes undefined. That’s why if you want to preserve value in RAM, you must write it back to the same location  every time it's read. In the emulator RAM word resets to 0 after it's read.
 
 ## Emulation 
 There’s simple command-line emulator available, made in C#. It accepts assembler file as an input, does simple preprocessing and executes the programm. No actual byte-code generation present.
@@ -79,8 +79,8 @@ Preprocessor functions: removes comments and empty lines, resolves names of cons
 ### Example
 ```
 ;;;; File: prog.R200
-;;;; testting program
-;;;; counts in RA from 0 to COUNT
+;;;; testing program
+;;;; counts from 0 to COUNT in RA 
 
 ;;;;const's and var's declarations
 const COUNT 5		;'const' is a key-word that binds name 'COUNT' to address 0x0 
@@ -126,7 +126,7 @@ CONST: 5 3 9 0 0 0 0 0 0 0 0 0 0 0 0 0
 - There’s no comprehensive error output or any error-checking functionality (such as name overlapping, memory bound violation, etc.). If something goes wrong, the program just crashes with unhandled exception.
 - It is recommended to output the final result to RA and RB.
 - Memory limits
-  - `conts`'s and labels: no more than 16 per program
+  - `conts`'s and labels: no more than 16 per program (in total)
   - `var`'s: no more than 8 per program
   - instructions: no more than 64 per program
   
