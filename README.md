@@ -142,6 +142,7 @@ There’s also sqrt `sqrt.R200` program that implements Babylonian method, but u
 - Blocks that need to be designed: instruction decoder
 
 ### Photo
+<img width="850" src="cur.jpg" />
 
 ### Video
-
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=zwi_KmVjN6o" target="_blank"><img src="http://img.youtube.com/vi/zwi_KmVjN6o/0.jpg" width="240" height="180" border="10" /></a>
