@@ -1,0 +1,50 @@
+;;;mul
+;;;23w rom, 2w const's, 2w+1w rbm
+;;;
+
+const mulAin 1285		;first multiplicant input (4095 max)
+const mulBin 3129		;second multiplicant input (4095 max)
+var mulR				;high-word result
+var mulA 				;first multiplicant, low-word result
+var TEMP 				;counter
+
+;test:
+;load multiplicants
+	movc ra, mulAin
+	movm mulA, ra
+	movc ra, mulBin
+
+;call mul subrutine
+	leaf
+	jmp mul
+
+;display result
+	movm RA, mulR		;high-word result
+	movm RB, mulA 		;low-word result
+	halt
+
+mul:					;mulR:mulA <- mulA*ra
+	mov rb, 0
+	movm mulR, rb
+	mov rb, 12
+	movm TEMP, rb
+	movm rb, mulA
+	clrc
+	shcr rb
+	movm mulA, rb
+mul1:				
+	movm rb, mulR
+	snc
+	add rb				;rb <- rb+ra			
+	shcr rb
+	movm mulR, rb
+	movm rb, mulA
+	shcr rb
+	movm mulA, rb
+	movm rb, TEMP
+	buc
+	dec rb 				;'dec' overwrites carry flag, so we need to buffer and recall it with 'buc' and 'rec'
+	rec
+	movm TEMP, rb
+	jnz mul1
+	ret

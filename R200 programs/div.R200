@@ -1,0 +1,105 @@
+;;;div
+;;; 46 cmd's, 4 const's, (6+1) ram
+;;;
+
+;4113195 / 9185 = 447(0x1BF)
+const dvdnHighIn 1004 	;0x3EC
+const dvdnLowIn 811 	;0x32B
+const dvsrHighIn 2 		;0x2
+const dvsrLowIn 993  	;0x3E1
+const CONST_25 25
+
+var dvdnHigh ;0		;also result High
+var dvdnLow  ;1		;also result Low
+var dvsrHigh ;2
+var dvsrLow	 ;3
+var remHigh  ;4
+var remLow   ;5
+var count    ;6
+
+;test:
+;load dividend and divisor
+	mov rb, 3
+loadLoop:
+	lic
+	sim
+	dec rb
+	sc
+	jmp loadLoop
+
+;call div subrutine
+	leaf
+	jmp div
+
+;display result
+	movm RA, dvdnHigh		;high-word result
+	movm RB, dvdnLow 		;low-word result
+	halt
+
+
+div:				;dvdnHigh:dvdnLow / dvsrHigh:dvsrLow = dvdnHigh:dvdnLow % remHigh:remLow
+	;;;;1. Clear remainder and carry.
+	mov rb, 0
+	movm remHigh, rb
+	movm remLow, rb
+	clrc
+
+	;;;;2. Load loop counter with 25.
+	movc rb, CONST_25
+	movm count, rb
+
+div1:
+	;;;;3. Shift left dividend into carry
+	movm ra, dvdnLow
+	shcl ra
+	movm dvdnLow, ra
+	movm ra, dvdnHigh
+	shcl ra
+	movm dvdnHigh, ra
+
+	;;;;4. Decrement loop counter.
+	movm ra, count
+	buc
+	dec ra
+	rec
+	movm count, ra
+
+	;;;;5. If loop counter = 0, return.
+	snz
+	ret
+
+	;;;;6. Shift left carry (from dividend/result) into remainder
+	movm ra, remLow
+	shcl ra
+	movm remLow, ra
+	movm ra, remHigh
+	shcl ra
+	movm remHigh, ra
+
+	;;;;7. Subtract divisor from remainder.
+	movm rb, dvsrLow
+	movm dvsrLow, rb	;refresh
+	movm ra, remLow
+	sub ra
+	movm remLow, ra
+	movm rb, dvsrHigh
+	movm dvsrHigh, rb	;refresh
+	movm ra, remHigh
+	movm remHigh, ra	;refresh
+	sbc ra
+
+	;;;;8. If result negative, add back divisor, clear carry and goto Step 3.
+	jnc sub_pos
+	movm rb, dvsrLow
+	movm dvsrLow, rb	;refresh
+	movm ra, remLow
+	add ra
+	movm remLow, ra
+	clrc
+	jmp div1
+
+sub_pos:
+	;;;;9. Set carry and goto Step 3.
+	movm remHigh, ra
+	setc
+	jmp div1
