@@ -137,7 +137,7 @@ There’s also sqrt `sqrt.R200` program that implements Babylonian method, but u
   
 ## Current construction progress
 
-- Blocks assembled, mouned and tested: PC register, PC increment, ROM, clock generator.
+- Blocks assembled, mounted and tested: PC register, PC increment, ROM, clock generator.
 - Blocks assembled: ALU, RA register, RB register, RAM
 - Blocks that need to be designed: instruction decoder
 
