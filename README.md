@@ -60,9 +60,11 @@ Hardware
 - 3A power supply (temporary switched-mode type, so technically it breaks the second ground rule)
 
 ## Documentation
-The only somewhat finished now piece of documentation is the instruction set.
+The only somewhat finished piece of documentation is the instruction set.
 
 PDF: <a href="R200 Instruction Set.pdf">R200 Instruction Set</a>
+
+For ALU instructions if Rd is RA, then Rs is RB and vice-versa.
 
 ## Important notes
 Due to the physical implementation limitations, any RAM word and LEAF register can only be read ones. Once the RAM location or LEAF register has been read its state becomes undefined. That’s why if you want to preserve value in a RAM, you must write it back to the same location immediately every time it has been read. In the emulator RAM a word resets to 0 after it has been read.
