@@ -6,6 +6,8 @@
 ## About
 R200 project is a personal project centered around creating general purpose relay computer. "200" in the name suggests that the machine will be constructed with use of about 200 electromagnetic relays.
 
+**Scroll to the end of this file for Current construction progress, Photo and Video.**
+
 ## but WHY?!
 I mean... You've probably come to the wrong place if that's the question that bothers you. (= Seriously, though, the purpose of the project is entirely recreational. i.e. DON'T FORGET YOU'RE HERE FOR FUN.
 
