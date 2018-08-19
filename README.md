@@ -1,5 +1,5 @@
 # R200 Relay Computer
-<img width="600" src="titleImg.jpg" />
+<img width="600" src="img/titleImg.jpg" />
 
 *oh gods, here goes nothing…*
 
@@ -20,7 +20,7 @@ With that being said, let's get down to business.
 ## Machine specs
 The machine is based on the harvard architecture (separate program and data memory).
 ### Block diagram
-<img width="600" src="block-dia.png" />
+<img width="600" src="img/block-dia.png" />
 
 ### Specs
 Bus
@@ -64,7 +64,7 @@ Hardware
 ## Documentation
 The only somewhat finished piece of documentation is the instruction set.
 
-PDF: <a href="R200 Instruction Set.pdf">R200 Instruction Set</a>
+PDF: <a href="doc/R200 Instruction Set.pdf">R200 Instruction Set</a>
 
 For ALU instructions if Rd is RA, then Rs is RB and vice-versa.
 
@@ -103,7 +103,7 @@ loop:			;'loop' is a label name. Preprocessor binds name 'loop' to
 exit:			;'exit' is a label name. Preprocessor binds name 'exit' to address 0x2 of CONST memory 
 			;and puts value 0x07 (ROM address the label is points to) in there by that address
 	halt		;stops the machine clock
-  ```
+```
 Run step-by-step: `remu.exe prog.R200`, run until `halt`: `remu.exe prog.R200 run`.
 
 At every step the emulator outputs its curent state. For instance:
@@ -142,7 +142,7 @@ There’s also sqrt `sqrt.R200` program that implements Babylonian method, but u
 - Blocks that need to be designed: instruction decoder
 
 ### Photo
-<img width="850" src="cur.jpg" />
+<img width="850" src="img/cur.jpg" />
 
 ### Video
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=zwi_KmVjN6o" target="_blank"><img src="http://img.youtube.com/vi/zwi_KmVjN6o/0.jpg" width="240" height="180" border="10" /></a>
