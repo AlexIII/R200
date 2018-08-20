@@ -28,7 +28,7 @@ Bus
 - 8-bit instructions
 - 6-bit program address bus
 - 4-bit RAM address bus
-- 4-bit CONST MEMORY address bus
+- 4-bit CONST memory address bus
 
 Memory
 - ROM (Program memory): 64 x 8-bit instructions (implemented as array of 64 by 8 dip-switches)
@@ -40,7 +40,7 @@ Memory
   - 6-bit Leaf Register (implemented as array of 6 electrolytic capacitors)
 
 ALU
-- Some of 16 functions of ALU: add/sub, inc/dec, shift right/left, bit-wise not/and/or/xor
+- Some of 16 functions of ALU: add/sub, inc/dec, shift right/left, bitwise not/and/or/xor
 - ALU can only operates on GPRs [RA and RB]
 - Carry Flag [CF]
 - Zero Flag [ZF]
@@ -102,11 +102,11 @@ loop:			;'loop' is a label name. Preprocessor binds name 'loop' to
 	jmp loop	;load value from CONST memory by address 'loop' (i.e. 0x1) to PC
 exit:			;'exit' is a label name. Preprocessor binds name 'exit' to address 0x2 of CONST memory 
 			;and puts value 0x07 (ROM address the label is points to) in there by that address
-	halt		;stops the machine clock
+	halt		;stop the machine clock
 ```
 Run step-by-step: `remu.exe prog.R200`, run until `halt`: `remu.exe prog.R200 run`.
 
-At every step the emulator outputs its curent state. For instance:
+At every cycle the emulator outputs its curent state. For instance:
 ```
 Cycle: 38		--- machine cycle counter
 CMD: halt		--- last executed instruction
@@ -120,7 +120,7 @@ CONST: 5 3 9 0 0 0 0 0 0 0 0 0 0 0 0 0
 ### Notes
 
 - All `const`’s and `var`’s must precede actual instructions in the file.
-- It is recommended to use 4 or more characters to name your `const`’s, `var`’s and labels, so they don’t accidently overlap with instruction names.
+- It's recommended to use 4 or more characters to name your `const`’s, `var`’s and labels, so they don’t accidently overlap with instruction names.
 - All numerical values should be decimal. Hex `0x` and Bin `0b` formats are not supported.
 - Emulation stops on the first encounter of `halt` instruction.
 - There’s no comprehensive error output or any error-checking functionality (such as name overlapping, memory bound violation, etc.). If something goes wrong, the program just crashes with unhandled exception.
