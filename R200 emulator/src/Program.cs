@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Windows.Forms;
+using System.Threading;
 
 namespace remu
 {
     class Program
     {
         const double secPerTick = 0.45;
+        const bool EnableGUI = true;
         static void Main(string[] args)
         {
             if(args.Length < 1)
@@ -39,6 +42,14 @@ namespace remu
                 return;
 
             Remulator remulator = new Remulator(res.cmem, res.prog);
+            if (EnableGUI)
+            {
+                var form = new MainForm(remulator);
+                Application.EnableVisualStyles();
+                var thread = new Thread(() => System.Windows.Forms.Application.Run(form));
+                thread.Start();
+            }
+
             while (!remulator.halt)
             {
                 remulator.step();
