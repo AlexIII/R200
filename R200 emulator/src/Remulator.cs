@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace remu
 {
-    class Remulator
+    public class Remulator
     {
         public const int constMemSize = 16;
         public const int ramSize = 8;
@@ -23,6 +23,9 @@ namespace remu
         public bool halt;
         public string prvCmd = "";
 
+        public EventHandler StepCompleted;
+        public UInt32[] ConstMemory => cmem.ToList().ToArray(); // poor man's shallow copy
+
         public Remulator(UInt32[] cmem, string[] rom = null)
         {
             this.cmem = cmem;
@@ -33,6 +36,9 @@ namespace remu
         public void step()
         {
             exec(prvCmd = rom[state.PC]);
+
+            // Callback for subscribers
+            StepCompleted?.Invoke(this, EventArgs.Empty);
         }
 
         public bool run(int maxCycles = 5000)
