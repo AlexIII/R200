@@ -1,0 +1,136 @@
+;;;sqrt
+;;;doesn't work due to PC overflow
+
+const sqrHigh 0 ;3843
+const sqrLow 36 ;880
+const CONST_25 25
+
+var dvdnHigh ;0		;also div result High
+var dvdnLow  ;1		;also div result Low
+var dvsrHigh ;2		;also sqrt result High (x_n)
+var dvsrLow	 ;3		;also sqrt result Low (x_n)
+var remHigh  ;4
+var remLow   ;5
+var count    ;6
+
+
+;sqrt
+	;;;;x_0 = 15
+	mov rb, 6
+	movm dvsrLow, rb
+	mov rb, 0
+	movm dvsrHigh, rb
+
+sqrt_loop:
+	;;;;load S
+	movc ra, sqrLow
+	movm dvdnLow, ra
+	movc ra, sqrHigh
+	movm dvdnHigh, ra
+
+	;;;;  dvdnHigh:dvdnLow = S/x_0
+	;div:				;dvdnHigh:dvdnLow / dvsrHigh:dvsrLow = dvdnHigh:dvdnLow % remHigh:remLow
+		;;;;1. Clear remainder and carry.
+		mov rb, 0
+		movm remHigh, rb
+		movm remLow, rb
+		clrc
+
+		;;;;2. Load loop counter with 25.
+		movc rb, CONST_25
+		movm count, rb
+
+	div1:
+		;;;;3. Shift left dividend into carry
+		movm ra, dvdnLow
+		shcl ra
+		movm dvdnLow, ra
+		movm ra, dvdnHigh
+		shcl ra
+		movm dvdnHigh, ra
+
+		;;;;4. Decrement loop counter.
+		movm ra, count
+		buc
+		dec ra
+		rec
+		movm count, ra
+
+		;;;;5. If loop counter = 0, return.
+		jz div_done
+
+		;;;;6. Shift left carry (from dividend/result) into remainder
+		movm ra, remLow
+		shcl ra
+		movm remLow, ra
+		movm ra, remHigh
+		shcl ra
+		movm remHigh, ra
+
+		;;;;7. Subtract divisor from remainder.
+		movm rb, dvsrLow
+		movm dvsrLow, rb	;refresh
+		movm ra, remLow
+		sub ra
+		movm remLow, ra
+		movm rb, dvsrHigh
+		movm dvsrHigh, rb	;refresh
+		movm ra, remHigh
+		movm remHigh, ra	;refresh
+		sbc ra
+
+		;;;;8. If result negative, add back divisor, clear carry and goto Step 3.
+		jnc sub_pos
+		movm rb, dvsrLow
+		movm dvsrLow, rb	;refresh
+		movm ra, remLow
+		add ra
+		movm remLow, ra
+		clrc
+		jmp div1
+
+	sub_pos:
+		;;;;9. Set carry and goto Step 3.
+		movm remHigh, ra
+		setc
+		jmp div1
+
+div_done:
+	;;;; x_n [dvdnHigh:dvdnLow] = (x_n-1 [dvsrHigh:dvsrLow]  + S/x_n-1 [dvdnHigh:dvdnLow]  )/2
+	movm ra, dvdnLow
+	movm rb, dvsrLow
+	add ra
+	movm dvdnLow, ra
+	movm ra, dvdnHigh
+	movm rb, dvsrHigh
+	adc ra
+	shcr ra
+	movm dvsrHigh, ra
+	movm ra, dvdnLow
+	shcr ra				;;;------ last executed instruction before PC overflows (ROM addr == 63)
+	movm dvdnLow, ra
+
+	;;;; if x_n != x_n-1 then go to the next iteration
+	clrz
+	movm ra, dvdnLow
+	movm dvdnLow, ra
+	movm rb, dvsrLow
+	sub ra
+	movm ra, dvdnHigh
+	movm dvdnHigh, ra
+	movm rb, dvsrHigh
+	sbc ra
+	jnz sqrt_loop
+
+	;;;; show result and halt
+	movm ra, dvdnHigh
+	movm rb, dvdnLow
+	halt
+
+
+
+
+
+
+
+

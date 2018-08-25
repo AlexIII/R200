@@ -1,0 +1,22 @@
+const FIB_N 16			; [2..18]
+var PRV_NUM
+var TEMP
+
+;main:
+	mov RB, 0			;current Fibonacci number in RB
+	movm PRV_NUM, RB
+	mov RB, 1
+	movc RA, FIB_N		;counter in RA
+	dec RA
+	clrc
+loop: 
+	movm TEMP, RA
+	movm RA, PRV_NUM
+	movm PRV_NUM, RB
+	add RB
+	movm RA, TEMP
+	dec RA
+	jnz loop
+
+	halt				; result in RA
+	
