@@ -75,6 +75,7 @@ Due to the physical implementation limitations, any RAM word and LEAF register c
 There’s simple command-line emulator available, made in C#. It accepts assembler file as an input, does simple preprocessing and executes the programm. No actual byte-code generation present.
 
 **Update**: Thanks to <a href="https://github.com/atsidaev">Alexander Tsidaev</a> there's now GUI that visualizes the machine memory!
+<img width="600" src="img/R200-GUI.png" />
 
 Preprocessor functions: removes comments and empty lines, resolves names of constants, variables and labels.
 
