@@ -134,7 +134,11 @@ CONST: 5 3 9 0 0 0 0 0 0 0 0 0 0 0 0 0
   - instructions: no more than 64 per program
   
 ## Software ideas
-There’s two programs available: multiplication `mul.R200` (12-bit X 12bit = 24bit) and division `div.R200` (24-bit / 24-bit = 24-bit[result] 24-bit[reminder]).
+Available testing programs: 
+- `mul.R200` - multiplication (12-bit X 12bit = 24bit)
+- `div.R200` - division (24-bit / 24-bit = 24-bit[result] 24-bit[reminder])
+- `fibonacci.R200` - calculates Fibonacci number (12-bit) from 2nd to 18th
+
 There’s also sqrt `sqrt.R200` program that implements Babylonian method, but unfortunately as for now I haven’t been able to fit it in 64 instructions (it’s 77 now), so it doesn’t work with the emulator.
 
   
