@@ -28,6 +28,23 @@ namespace remu
 
         private void InitializeEmulatorControls()
         {
+            flpRamPanel.Controls.Add(
+                    new BinaryLedStrip()
+                    {
+                        Address = "RA",
+                        Value = 0,
+                        Resolution = 12,
+                    }
+            );
+            flpRamPanel.Controls.Add(
+                    new BinaryLedStrip()
+                    {
+                        Address = "RB",
+                        Value = 0,
+                        Resolution = 12,
+                    }
+            );
+
             for (int i = 0; i < Remulator.ramSize; i++)
             {
                 flpRamPanel.Controls.Add(
@@ -35,6 +52,7 @@ namespace remu
                         Address = i.ToString("X2"),
                         Value = 0,
                         Resolution = 12,
+                        color = Brushes.Green
                     }
                 );
             }
@@ -76,10 +94,11 @@ namespace remu
                         InitializeEmulatorControls();
                 }
 
+                (flpRamPanel.Controls[0] as BinaryLedStrip).Value = _remu.state.RA;
+                (flpRamPanel.Controls[1] as BinaryLedStrip).Value = _remu.state.RB;
+
                 for (int i = 0; i < Remulator.ramSize; i++)
-                {
-                    (flpRamPanel.Controls[i] as BinaryLedStrip).Value = _remu.state.RAM[i];
-                }
+                    (flpRamPanel.Controls[i+2] as BinaryLedStrip).Value = _remu.state.RAM[i];
             }));
         }
     }

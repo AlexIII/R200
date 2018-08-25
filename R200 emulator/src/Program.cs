@@ -42,12 +42,14 @@ namespace remu
                 return;
 
             Remulator remulator = new Remulator(res.cmem, res.prog);
+            Thread guiThread = null;
+            MainForm guiForm = null;
             if (EnableGUI)
             {
-                var form = new MainForm(remulator);
+                guiForm = new MainForm(remulator);
                 Application.EnableVisualStyles();
-                var thread = new Thread(() => System.Windows.Forms.Application.Run(form));
-                thread.Start();
+                guiThread = new Thread(() => System.Windows.Forms.Application.Run(guiForm));
+                guiThread.Start();
             }
 
             while (!remulator.halt)
@@ -67,9 +69,17 @@ namespace remu
                         break;
                 }
             }
-            Console.WriteLine("\nYour programm would have been running on the real machine for about " +
+            Console.WriteLine("HALT.");
+            Console.WriteLine("\nYour programm would have been running on the real machine around " +
                 remulator.cycle*secPerTick + " sec.");
-            Console.WriteLine("Done.");
+
+            if (guiThread != null)
+            {
+                Console.WriteLine("Press 'q' to exit.");
+                while (Console.ReadKey().KeyChar != 'q') ;
+                guiForm.Close();
+                guiThread.Join();
+            }
         }
     }
 }

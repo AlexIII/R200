@@ -15,6 +15,8 @@ namespace remu
         protected override Label AddressLabel => lblAddress;
         protected override Label ValueLabel => lblValue;
 
+        public Brush color = Brushes.Red;
+
         public BinaryLedStrip() : base()
         {
             InitializeComponent();
@@ -30,7 +32,7 @@ namespace remu
                 for (int i = 0; i < Resolution; i++)
                 {
                     var left = drawingLeft + i * ElementMargin + i * Height;
-                    var brush = (Value & mask) > 0 ? Brushes.Red : Brushes.LightGray;
+                    var brush = (Value & mask) > 0 ? color : Brushes.LightGray;
                     g.FillEllipse(brush, left, 0, Height - 1, Height - 1);
                     g.DrawEllipse(Pens.Black, left, 0, Height - 1, Height - 1);
 
