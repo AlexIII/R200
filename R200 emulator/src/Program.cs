@@ -12,16 +12,26 @@ namespace remu
     class Program
     {
         const double secPerTick = 0.45;
-        const bool EnableGUI = true;
+        static bool EnableGUI = false;
         static void Main(string[] args)
         {
             if(args.Length < 1)
             {
-                Console.WriteLine("Usage: ./remu *.R200 [run]");
+                Console.WriteLine("Usage: ./remu [/gui] *.R200 [run]");
                 return;
             }
-            string progLine = File.ReadAllText(args[0]);
-            bool runAll = args.Length >= 2 && args[1].ToLower() == "run";
+            bool runAll = args.Length >= 2 && args.Last().ToLower() == "run";
+            var fileNamePos = runAll ? args.Length - 2 : args.Length - 1;
+            string progLine = File.ReadAllText(args[fileNamePos]);
+
+            // Parse additional options
+            foreach (var arg in args.Take(fileNamePos))
+            {
+                switch (arg)
+                {
+                    case "/gui": EnableGUI = true; break;
+                }
+            }
 
 
             Preprocessor pr = new Preprocessor();
@@ -32,25 +42,24 @@ namespace remu
             Console.WriteLine("Used CONST: \t" + res.constUsed + " / " + Preprocessor.constMemSize);
             Console.WriteLine("Used RAM: \t" + res.ramUsed + " / " + Preprocessor.ramSize);
 
+            Remulator remulator = new Remulator(res.cmem, res.prog);
+            MainForm guiForm = null;
+            if (EnableGUI)
+            {
+                guiForm = new MainForm(remulator);
+                Application.EnableVisualStyles();
+                Application.Run(guiForm);
+                return;
+            }
+
             Console.WriteLine("\nPress any key to start emulation.");
-            if(!runAll)
+            if (!runAll)
             {
                 Console.WriteLine("Press 'q' to break or any other key to advance one step.");
             }
             Console.WriteLine("");
             if (Console.ReadKey().KeyChar == 'q')
                 return;
-
-            Remulator remulator = new Remulator(res.cmem, res.prog);
-            Thread guiThread = null;
-            MainForm guiForm = null;
-            if (EnableGUI)
-            {
-                guiForm = new MainForm(remulator);
-                Application.EnableVisualStyles();
-                guiThread = new Thread(() => System.Windows.Forms.Application.Run(guiForm));
-                guiThread.Start();
-            }
 
             while (!remulator.halt)
             {
@@ -72,14 +81,6 @@ namespace remu
             Console.WriteLine("HALT.");
             Console.WriteLine("\nYour programm would have been running on the real machine around " +
                 remulator.cycle*secPerTick + " sec.");
-
-            if (guiThread != null)
-            {
-                Console.WriteLine("Press 'q' to exit.");
-                while (Console.ReadKey().KeyChar != 'q') ;
-                guiForm.Close();
-                guiThread.Join();
-            }
         }
     }
 }

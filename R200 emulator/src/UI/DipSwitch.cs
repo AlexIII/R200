@@ -12,7 +12,9 @@ namespace remu
 {
     public partial class DipSwitch : AddressLineUserControl
     {
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         protected override Label AddressLabel => lblAddress;
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         protected override Label ValueLabel => lblValue;
 
         public DipSwitch()
@@ -20,34 +22,26 @@ namespace remu
             InitializeComponent();
         }
 
-        private void DipSwitch_Paint(object sender, PaintEventArgs e)
+        protected override void Repaint(Graphics g)
         {
-            var padding = 2;
             var width = Height / 2;
             var height = (Height - 4) / 3;
             var drawingLeft = DrawingLeft;
 
-            using (var g = e.Graphics)
+            UInt32 mask = (UInt32)1 << (Resolution - 1);
+            for (int i = 0; i < Resolution; i++)
             {
-                UInt32 mask = (UInt32)1 << (Resolution - 1);
-                for (int i = 0; i < Resolution; i++)
-                {
-                    var left = drawingLeft + i * padding + i * Height;
-                    g.FillRectangle(Brushes.DarkRed, left, 0, Height - 1, Height - 1);
-                    g.FillRectangle(Brushes.White, left + width / 2, (Value & mask) > 0 ? 2 : Height - 3 - height, width, height);
+                var left = drawingLeft + i * ElementMargin + i * Height;
+                g.FillRectangle(Brushes.DarkRed, left, 0, Height - 1, Height - 1);
+                g.FillRectangle(Brushes.White, left + width / 2, (Value & mask) > 0 ? 2 : Height - 3 - height, width, height);
       
-                    mask >>= 1;
-                }
+                mask >>= 1;
             }
-      
-            Width = drawingLeft + (Resolution - 1) * padding + Resolution * Height;
         }
 
         private void DipSwitch_MouseDown(object sender, MouseEventArgs e)
         {
-            var padding = 2;
-      
-            var p = (e.X - DrawingLeft) / (Height + padding);
+            var p = (e.X - DrawingLeft) / (Height + ElementMargin);
             if (p >= 0 && p < Resolution)
             {
                 p = Resolution - p - 1;

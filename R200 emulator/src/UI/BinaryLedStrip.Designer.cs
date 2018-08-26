@@ -60,7 +60,6 @@
             this.Controls.Add(this.lblAddress);
             this.Name = "BinaryLedStrip";
             this.Size = new System.Drawing.Size(635, 17);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.BinaryLedStrip_Paint);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -59,8 +59,7 @@
             this.Controls.Add(this.lblValue);
             this.Controls.Add(this.lblAddress);
             this.Name = "DipSwitch";
-            this.Size = new System.Drawing.Size(256, 12);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.DipSwitch_Paint);
+            this.Size = new System.Drawing.Size(256, 17);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DipSwitch_MouseDown);
             this.ResumeLayout(false);
             this.PerformLayout();
