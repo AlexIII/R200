@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace remu
 {
-    class Preprocessor
+    public class Preprocessor
     {
         public const int constMemSize = 16;
         public const int ramSize = 8;
@@ -28,12 +28,17 @@ namespace remu
             public uint[] cmem;
             public int constUsed;
             public int ramUsed;
-            public ProcProg(string[] prog, uint[] cmem, int constUsed, int ramUsed)
+            
+            public string initialSourceCode;
+            public Dictionary<int, int> LineNumberRelation { get; } = new Dictionary<int, int>();
+            public ProcProg(string[] prog, uint[] cmem, int constUsed, int ramUsed, string initialSourceCode, Dictionary<int, int> lineNumberRelation)
             {
                 this.prog = prog;
                 this.cmem = cmem;
                 this.constUsed = constUsed;
                 this.ramUsed = ramUsed;
+                this.initialSourceCode = initialSourceCode;
+                LineNumberRelation = lineNumberRelation;
             }
         }
 
@@ -47,8 +52,14 @@ namespace remu
 
         public ProcProg go(string prog)
         {
+            var lineNumberRelationStep1ToStep2 = new Dictionary<int, int>();
+            var lineNumberRelationStep2ToStep3 = new Dictionary<int, int>();
+
             string[] lines = prog.Split(new char[] { '\n' });
             printLines(lines);
+
+            // Temporary store reconstructed source code with system-specific new line
+            prog = String.Join(Environment.NewLine, lines);
 
             for (int i = 0; i < lines.Length; ++i)
                 lines[i] = strip(lines[i]);
@@ -57,7 +68,7 @@ namespace remu
             //register consts
             for (int i = 0; i < lines.Length; ++i)
                 lines[i] = registerConsts(lines[i]);
-            lines = dropNulls(lines);
+            lines = dropNulls(lines, lineNumberRelationStep1ToStep2);
             printLines(lines);
 
             //register labels
@@ -67,7 +78,7 @@ namespace remu
                 lines[i] = registerLabels(lines[i], nextPc);
                 if (lines[i] != null) ++nextPc;
             }
-            lines = dropNulls(lines);
+            lines = dropNulls(lines, lineNumberRelationStep2ToStep3);
             printLines(lines);
 
             //resolve consts
@@ -80,14 +91,35 @@ namespace remu
                 lines[i] = resolveLabels(lines[i]);
             printLines(lines);
 
-            return new ProcProg(lines, cmem, constMem.size, ramMem.size);
+            // Restore relation of final result lines to initial input source code lines
+            var lineNumberRelationFinal = new Dictionary<int, int>();
+            foreach (var l in lineNumberRelationStep2ToStep3)
+            {
+                // l.Key - final output line number
+                // l.Value - previous step line number
+                var prev = lineNumberRelationStep1ToStep2.FirstOrDefault(kv => kv.Key == l.Value);
+                // prev.Key - first step line number
+                // prev.Value - initial source code line number
+                lineNumberRelationFinal.Add(l.Key, prev.Value);
+            }
+
+            return new ProcProg(lines, cmem, constMem.size, ramMem.size, prog, lineNumberRelationFinal);
         }
 
-        public string[] dropNulls(string[] strs)
+        public string[] dropNulls(string[] strs, Dictionary<int, int> lineNumberRelation)
         {
+            int inputLineNumber = 0, outputLineNumber = 0;
             List<string> l = new List<string>();
             foreach (string s in strs)
-                if(s != null) l.Add(s);
+            {
+                if (s != null)
+                {
+                    l.Add(s);
+                    lineNumberRelation.Add(outputLineNumber, inputLineNumber);
+                    outputLineNumber++;
+                }
+                inputLineNumber++;
+            }
             return l.ToArray();
         }
 

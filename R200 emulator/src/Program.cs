@@ -46,7 +46,7 @@ namespace remu
             MainForm guiForm = null;
             if (EnableGUI)
             {
-                guiForm = new MainForm(remulator);
+                guiForm = new MainForm(remulator, res, runAll);
                 Application.EnableVisualStyles();
                 Application.Run(guiForm);
                 return;
