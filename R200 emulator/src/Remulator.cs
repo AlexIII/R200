@@ -238,7 +238,7 @@ namespace remu
                 case "shcr": state.setGPRupdFlags(dest, ((r1&1) << dataBusWidth) | (Convert.ToUInt32(state.c) << (dataBusWidth-1)) | (r1>>1), State.Zmode.AND); break;
                 case "shr": state.setGPRupdFlags(dest, r1>>1, State.Zmode.SKIP); break;
                 case "shcl": state.setGPRupdFlags(dest, Convert.ToUInt32(state.c) | (r1 << 1), State.Zmode.AND); break;
-                case "shl": state.setGPRupdFlags(dest, (r1 << 1) & dataBusMask, State.Zmode.SKIP); break;
+                case "shl": state.setGPRupdFlags(dest, (r1 << 1) & dataBusMask | (((1 << dataBusWidth - 1) & r1) >> dataBusWidth - 1), State.Zmode.SKIP); break;
                 case "not": state.setGPRupdFlags(dest, ((r1 << 1) & ~dataBusMask) | (~r1 & dataBusMask), State.Zmode.UPD); break;
                 case "and": state.setGPRupdFlags(dest, (1 << dataBusWidth) | (r1 & r2), State.Zmode.UPD); break;
                 case "or": state.setGPRupdFlags(dest, (r1 | r2), State.Zmode.UPD); break;
