@@ -224,6 +224,11 @@ namespace remu
         private void ShowCurrentSourceCodeLine()
         {
             // Highlight current source code line
+
+            // Do nothing if we went outside of our source code
+            if (!_preprocessedProgram.LineNumberRelation.ContainsKey((int)_remu.state.PC))
+                return;
+
             var lineNumber = _preprocessedProgram.LineNumberRelation[(int)_remu.state.PC];
             var position = txtSourceCode.GetFirstCharIndexFromLine(lineNumber);
             if (position < 0)
