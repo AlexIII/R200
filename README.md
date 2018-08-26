@@ -64,7 +64,7 @@ Hardware
 ## Documentation
 Somewhat finished pieces:
 - <a href="doc/R200 Instruction Set.pdf">R200 Instruction Set</a> [Note: for ALU instructions if Rd is RA, then Rs is RB and vice-versa.]
-- <a href="schematics/gen-seq.png">Clock generator / sequencer</a>
+- <a href="schematics/R200-AUG-2018.pdf">Schematic of currently assembled part</a> (Program Counter, ROM and CLOCK GENERATOR / SEQUENCER)
 
 
 
