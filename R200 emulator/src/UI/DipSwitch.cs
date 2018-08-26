@@ -16,6 +16,7 @@ namespace remu
         protected override Label AddressLabel => lblAddress;
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         protected override Label ValueLabel => lblValue;
+        protected override ToolTip ValueToolTip => toolTip;
 
         public DipSwitch()
         {

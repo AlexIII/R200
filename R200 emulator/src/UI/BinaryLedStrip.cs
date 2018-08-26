@@ -14,6 +14,7 @@ namespace remu
     {
         protected override Label AddressLabel => lblAddress;
         protected override Label ValueLabel => lblValue;
+        protected override ToolTip ValueToolTip => toolTip;
 
         public Brush Color = Brushes.Red;
 

@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.lblAddress = new System.Windows.Forms.Label();
             this.lblValue = new System.Windows.Forms.Label();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // lblAddress
@@ -51,6 +53,13 @@
             this.lblValue.Size = new System.Drawing.Size(32, 17);
             this.lblValue.TabIndex = 1;
             this.lblValue.Text = "4EA";
+            this.toolTip.SetToolTip(this.lblValue, "Hello");
+            // 
+            // toolTip
+            // 
+            this.toolTip.AutoPopDelay = 5000;
+            this.toolTip.InitialDelay = 200;
+            this.toolTip.ReshowDelay = 100;
             // 
             // BinaryLedStrip
             // 
@@ -59,7 +68,7 @@
             this.Controls.Add(this.lblValue);
             this.Controls.Add(this.lblAddress);
             this.Name = "BinaryLedStrip";
-            this.Size = new System.Drawing.Size(635, 17);
+            this.Size = new System.Drawing.Size(202, 17);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -69,5 +78,6 @@
 
         private System.Windows.Forms.Label lblAddress;
         private System.Windows.Forms.Label lblValue;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

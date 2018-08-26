@@ -19,6 +19,7 @@ namespace remu
 
         protected virtual Label AddressLabel { get; }
         protected virtual Label ValueLabel { get; }
+        protected virtual ToolTip ValueToolTip { get; }
 
         protected int DrawingLeft => ((ValueLabel?.Left + ValueLabel?.Width) ?? 0) + 20;
         protected const int ElementMargin = 2;
@@ -54,6 +55,7 @@ namespace remu
                 var needInvalidate = _value != value;
                 _value = value;
                 ValueLabel.Text = value.ToString("X" + Math.Ceiling(Resolution / 4M));
+                ValueToolTip.SetToolTip(ValueLabel, String.Format("DEC: {0} | BIN: {1}", value, Convert.ToString(value, 2)));
 
                 if (needInvalidate)
                     Invalidate();

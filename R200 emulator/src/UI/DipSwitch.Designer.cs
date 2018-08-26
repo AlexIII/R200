@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.lblValue = new System.Windows.Forms.Label();
             this.lblAddress = new System.Windows.Forms.Label();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // lblValue
@@ -52,6 +54,12 @@
             this.lblAddress.TabIndex = 2;
             this.lblAddress.Text = "0x000000";
             // 
+            // toolTip
+            // 
+            this.toolTip.AutoPopDelay = 5000;
+            this.toolTip.InitialDelay = 200;
+            this.toolTip.ReshowDelay = 100;
+            // 
             // DipSwitch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -59,7 +67,7 @@
             this.Controls.Add(this.lblValue);
             this.Controls.Add(this.lblAddress);
             this.Name = "DipSwitch";
-            this.Size = new System.Drawing.Size(256, 17);
+            this.Size = new System.Drawing.Size(202, 17);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DipSwitch_MouseDown);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -70,5 +78,6 @@
 
         private System.Windows.Forms.Label lblValue;
         private System.Windows.Forms.Label lblAddress;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }
