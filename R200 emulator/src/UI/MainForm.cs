@@ -16,6 +16,8 @@ namespace remu
         public enum EmulatorState { Execution, StepByStep, Pause, Stop };
 
         private Remulator _remu;
+        Preprocessor.ProcProg _preprocessedProgram;
+        bool _needToShowCurrentLineOfSourceCode;
 
         private EmulatorState _emulatorState = EmulatorState.Stop;
         private int _executionSpeed = 0;
@@ -26,10 +28,11 @@ namespace remu
             InitializeComponent();
         }
 
-        public MainForm(Remulator remu, bool run = false)
+        public MainForm(Remulator remu, Preprocessor.ProcProg preprocessedProgram, bool run = false)
         {
             _remu = remu;
-            
+            _preprocessedProgram = preprocessedProgram;
+
             _emulatorThread.DoWork += EmulatorThread_DoWork;
             _emulatorThread.RunWorkerAsync(); // starting it now. However, real operation will start only on Run button press (see DoWork handler)
             _remu.StepCompleted += Remulator_StepCompleted;
@@ -123,6 +126,8 @@ namespace remu
                 if (flpRamPanel.Controls.Count == 0)
                     InitializeEmulatorControls();
             }
+
+            txtSourceCode.Text = _preprocessedProgram.initialSourceCode;
         }
 
         private void Remulator_StepCompleted(object sender, EventArgs e)
@@ -131,12 +136,15 @@ namespace remu
             if (_emulatorState == EmulatorState.StepByStep)
             {
                 _emulatorState = EmulatorState.Pause;
+                _needToShowCurrentLineOfSourceCode = true;
                 return;
             }
 
             if (_executionSpeed == 0)
                 return;
-            
+
+            _needToShowCurrentLineOfSourceCode = _executionSpeed > 0;
+
             Thread.Sleep(_executionSpeed);
         }
 
@@ -167,6 +175,13 @@ namespace remu
             {
                 // if we should stop because of Halt, theb simulate Stop button click
                 btnStop_Click(sender, e);
+                _needToShowCurrentLineOfSourceCode = true;
+            }
+
+            if (_needToShowCurrentLineOfSourceCode)
+            {
+                ShowCurrentSourceCodeLine();
+                _needToShowCurrentLineOfSourceCode = false;
             }
         }
 
@@ -197,12 +212,43 @@ namespace remu
             {
                 _emulatorState = EmulatorState.Pause;
                 btnPause.Checked = true;
+                ShowCurrentSourceCodeLine();
             }
             else if (_emulatorState == EmulatorState.Pause)
             {
                 _emulatorState = EmulatorState.Execution;
                 btnPause.Checked = false;
             }
+        }
+
+        private void ShowCurrentSourceCodeLine()
+        {
+            // Highlight current source code line
+
+            // Do nothing if we went outside of our source code
+            if (!_preprocessedProgram.LineNumberRelation.ContainsKey((int)_remu.state.PC))
+                return;
+
+            var lineNumber = _preprocessedProgram.LineNumberRelation[(int)_remu.state.PC];
+            var position = txtSourceCode.GetFirstCharIndexFromLine(lineNumber);
+            if (position < 0)
+            {
+                // lineNumber is too big
+                txtSourceCode.Select(txtSourceCode.Text.Length, 0);
+            }
+            else
+            {
+                int lineEnd = txtSourceCode.Text.IndexOf(Environment.NewLine, position);
+                if (lineEnd < 0)
+                {
+                    lineEnd = txtSourceCode.Text.Length;
+                }
+
+                txtSourceCode.Select(position, lineEnd - position);
+            }
+
+            txtSourceCode.ScrollToCaret();
+            txtSourceCode.Focus();
         }
 
         private void btnStop_Click(object sender, EventArgs e)
@@ -231,6 +277,12 @@ namespace remu
             // We will stop after a moment so we can check Pause button here
             // This is easier that to invoke it in OnStepCompleted callback from another thread.
             btnPause.Checked = true;
+        }
+
+        private void txtSourceCode_ScrollPositionChanged(object sender, ScrollEventArgs e)
+        {
+            // TODO: draw current line arrow and breakpoint circles
+            // Text = e.NewValue.ToString();
         }
     }
 }

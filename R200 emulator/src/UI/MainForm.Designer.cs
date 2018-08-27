@@ -38,24 +38,27 @@
             this.flpRegisters = new System.Windows.Forms.FlowLayoutPanel();
             this.repaintTimer = new System.Windows.Forms.Timer(this.components);
             this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.btnStep = new System.Windows.Forms.ToolStripButton();
             this.btnRun = new System.Windows.Forms.ToolStripButton();
             this.btnRun10x = new System.Windows.Forms.ToolStripButton();
             this.btnRunOnMaximumSpeed = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btnPause = new System.Windows.Forms.ToolStripButton();
             this.btnStop = new System.Windows.Forms.ToolStripButton();
-            this.btnStep = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.txtSourceCode = new ScrollbarPosition.MultilineScrollableTextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.toolStrip.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // flpROM
             // 
-            this.flpROM.Location = new System.Drawing.Point(361, 325);
+            this.flpROM.Location = new System.Drawing.Point(683, 245);
             this.flpROM.Name = "flpROM";
-            this.flpROM.Size = new System.Drawing.Size(491, 178);
+            this.flpROM.Size = new System.Drawing.Size(359, 67);
             this.flpROM.TabIndex = 1;
             // 
             // groupBox1
@@ -135,6 +138,16 @@
             this.toolStrip.TabIndex = 6;
             this.toolStrip.Text = "toolStrip1";
             // 
+            // btnStep
+            // 
+            this.btnStep.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnStep.Image = global::remu.Properties.Resources.Step;
+            this.btnStep.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnStep.Name = "btnStep";
+            this.btnStep.Size = new System.Drawing.Size(23, 22);
+            this.btnStep.Text = "Step by Step Execution";
+            this.btnStep.Click += new System.EventHandler(this.btnStep_Click);
+            // 
             // btnRun
             // 
             this.btnRun.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -168,6 +181,11 @@
             this.btnRunOnMaximumSpeed.Text = "Run at Maximum Speed";
             this.btnRunOnMaximumSpeed.Click += new System.EventHandler(this.btnRun_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
             // btnPause
             // 
             this.btnPause.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -188,31 +206,43 @@
             this.btnStop.Text = "Stop";
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
-            // btnStep
+            // groupBox4
             // 
-            this.btnStep.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnStep.Image = global::remu.Properties.Resources.Step;
-            this.btnStep.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnStep.Name = "btnStep";
-            this.btnStep.Size = new System.Drawing.Size(23, 22);
-            this.btnStep.Text = "Step by Step Execution";
-            this.btnStep.Click += new System.EventHandler(this.btnStep_Click);
+            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox4.Controls.Add(this.txtSourceCode);
+            this.groupBox4.Location = new System.Drawing.Point(15, 321);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(1027, 152);
+            this.groupBox4.TabIndex = 7;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Source code";
             // 
-            // toolStripSeparator1
+            // txtSourceCode
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.txtSourceCode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSourceCode.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.txtSourceCode.Location = new System.Drawing.Point(3, 16);
+            this.txtSourceCode.Multiline = true;
+            this.txtSourceCode.Name = "txtSourceCode";
+            this.txtSourceCode.ReadOnly = true;
+            this.txtSourceCode.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtSourceCode.Size = new System.Drawing.Size(1021, 133);
+            this.txtSourceCode.TabIndex = 8;
+            this.txtSourceCode.ScrollPositionChanged += new System.Windows.Forms.ScrollEventHandler(this.txtSourceCode_ScrollPositionChanged);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1057, 485);
+            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.flpROM);
+            this.DoubleBuffered = true;
             this.Name = "MainForm";
             this.Text = "R200";
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -221,6 +251,8 @@
             this.groupBox3.ResumeLayout(false);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -243,5 +275,7 @@
         private System.Windows.Forms.ToolStripButton btnStop;
         private System.Windows.Forms.ToolStripButton btnStep;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private ScrollbarPosition.MultilineScrollableTextBox txtSourceCode;
     }
 }

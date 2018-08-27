@@ -74,6 +74,9 @@
     <Compile Include="Preprocessor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Remulator.cs" />
+    <Compile Include="UI\MultilineScrollableTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Step.png" />
