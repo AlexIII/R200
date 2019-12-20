@@ -156,3 +156,6 @@ There’s also sqrt `sqrt.R200` program that implements Babylonian method, but u
 
 ### Video
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=zwi_KmVjN6o" target="_blank"><img src="http://img.youtube.com/vi/zwi_KmVjN6o/0.jpg" width="240" height="180" border="10" /></a>
+
+### More awesome home-built computers
+[Homebrew Computers Web-Ring](https://www.homebrewcpuring.org/)
